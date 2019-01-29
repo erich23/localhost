@@ -60,9 +60,9 @@ __decorate([
 ], Transaction.prototype, "menu_id", void 0);
 __decorate([
     repository_1.property({
-        type: 'string'
+        type: 'date'
     }),
-    __metadata("design:type", String)
+    __metadata("design:type", Date)
 ], Transaction.prototype, "date_sold", void 0);
 Transaction = __decorate([
     repository_1.model({

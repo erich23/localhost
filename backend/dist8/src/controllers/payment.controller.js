@@ -50,15 +50,15 @@ let PaymentController = class PaymentController {
                 amount: foundMenu.price * 100
             });
             console.log(charge);
+            //removed customer tokens from transactions
             // Create a Transaction in your Transaction Repo
             let createdTransaction = await this.transactionRepo.create({
                 stripe_charge_id: charge.id,
                 price: foundMenu.price,
-                customer_token: jwt,
                 customer_id: user.user_id,
                 provider_id: foundProduct.provider_id,
                 menu_id,
-                date_sold: new Date().toString()
+                date_sold: new Date()
             });
             // Return the transaction
             return createdTransaction;

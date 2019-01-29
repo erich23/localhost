@@ -6,6 +6,8 @@ import { Http } from '@angular/http';
 import { User } from '../models/user';
 import { MyexperiencesPage } from '../myexperiences/myexperiences';
 import { SettingsPage } from '../settings/settings';
+import { Globals } from '../../app/globals';
+
 
 @Component({
   selector: 'page-profile',
@@ -17,6 +19,7 @@ export class ProfilePage {
 
   constructor(
     public navCtrl: NavController,
+    public globals: Globals,
     public navParams: NavParams,
     public http: Http,
     private app: App,
@@ -25,7 +28,7 @@ export class ProfilePage {
 
     if (localStorage.getItem("TOKEN")) {
 
-      this.http.get("https://localhost-ix-fs-2-2018.herokuapp.com/verify?jwt=" + localStorage.getItem("TOKEN"))
+      this.http.get(this.globals.URL + "/verify?jwt=" + localStorage.getItem("TOKEN"))
         .subscribe(
           result => {
             console.log(result.json());
@@ -41,7 +44,10 @@ export class ProfilePage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad ProfilePage');
 
-    this.http.get("https://localhost-ix-fs-2-2018.herokuapp.com/user?jwt="+localStorage.getItem("TOKEN")
+    console.log(this.globals.URL)
+
+
+    this.http.get(this.globals.URL + "/user?jwt=" + localStorage.getItem("TOKEN")
     ).subscribe(
       result => {
         console.log(result);
@@ -52,7 +58,7 @@ export class ProfilePage {
     )
 
   }
-  
+
   navigateToHome() {
     console.log("Navigating to HomePage...");
 

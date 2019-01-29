@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Http } from '@angular/http';
 import { Category } from '../models/categories';
 import { CategoryPage } from '../category/category';
+import { Globals } from '../../app/globals';
 
 /**
 * Generated class for the CategoriesPage page.
@@ -24,6 +25,7 @@ export class CategoriesPage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
+    public globals: Globals,
     public http: Http
   ) {
   }
@@ -31,7 +33,7 @@ export class CategoriesPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad CategoriesPage');
 
-    this.http.get("https://localhost-ix-fs-2-2018.herokuapp.com/allcategories")
+    this.http.get(this.globals.URL + "/allcategories")
       .subscribe(
         result => {
           console.log(result)

@@ -17,17 +17,14 @@
   <ion-list>
     <ion-card type="button" (click)="navigateToProduct(product)" *ngFor="let product of products">
 
-
       <ion-card-header>
         <ion-item style="margin: -10px">
           <h2>{{product?.name}}</h2>
         </ion-item>
-
-
       </ion-card-header>
       <ion-card-content>
 
-        <img src="{{product.photo_url}}" alt="product image">
+        <img height="250px" src="{{product.photo_url}}" alt="product image">
 
         <h3> Description: </h3>
         <p>{{product?.description}}</p>

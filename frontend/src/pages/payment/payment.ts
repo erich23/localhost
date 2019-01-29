@@ -6,6 +6,7 @@ import { Http } from '@angular/http';
 import { NgForm } from '@angular/forms';
 import { Menu } from '../models/menu';
 import { PaymentconfirmPage } from '../paymentconfirm/paymentconfirm';
+import { Globals } from '../../app/globals';
 
 /**
  * Generated class for the PaymentPage page.
@@ -19,7 +20,7 @@ import { PaymentconfirmPage } from '../paymentconfirm/paymentconfirm';
   selector: 'page-payment',
   templateUrl: 'payment.html',
 })
-export class PaymentPage implements AfterViewInit, OnDestroy{
+export class PaymentPage implements AfterViewInit, OnDestroy {
 
   @ViewChild('cardInfo') cardInfo: ElementRef;
 
@@ -27,22 +28,25 @@ export class PaymentPage implements AfterViewInit, OnDestroy{
   cardHandler = this.onChange.bind(this);
   error: string;
 
+  public errorMessage: boolean = false;
+
   public menu: Menu = new Menu;
   public product: Product = new Product();
 
   constructor(
-    public navCtrl: NavController, 
+    public navCtrl: NavController,
     public navParams: NavParams,
     public http: Http,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    public globals: Globals,
   ) {
 
     this.menu = this.navParams.get("menuParameter");
     this.product = this.navParams.get("productParameter");
 
     if (localStorage.getItem("TOKEN")) {
-      
-      this.http.get("http://localhost:3000/verify?jwt=" + localStorage.getItem("TOKEN"))
+
+      this.http.get(this.globals.URL + "/verify?jwt=" + localStorage.getItem("TOKEN"))
         .subscribe(
           result => {
             console.log(result.json());
@@ -85,11 +89,12 @@ export class PaymentPage implements AfterViewInit, OnDestroy{
     let source = result.source;
     if (error) {
       console.log('Something is wrong:', error);
+
     } else {
       console.log('Success!', source);
       // ...send the token to the your backend to process the charge
 
-      this.http.post("https://localhost-ix-fs-2-2018.herokuapp.com/payments/?jwt=" + localStorage.getItem("TOKEN") + "&menu_id=" + this.menu.menu_id, {
+      this.http.post(this.globals.URL + "/payments/?jwt=" + localStorage.getItem("TOKEN") + "&menu_id=" + this.menu.menu_id, {
         stripeToken: source,
         menuId: this.menu.menu_id
       }).subscribe(
@@ -102,8 +107,8 @@ export class PaymentPage implements AfterViewInit, OnDestroy{
             paymentConfirm
           });
         },
-
         err => {
+          this.errorMessage = true;
           console.log(err);
         }
       )
@@ -113,7 +118,7 @@ export class PaymentPage implements AfterViewInit, OnDestroy{
   ionViewDidLoad() {
     console.log('ionViewDidLoad PaymentPage');
 
-    this.http.get("https://localhost-ix-fs-2-2018.herokuapp.com/productinfo?product_id="+this.product.product_id
+    this.http.get(this.globals.URL + "/productinfo?product_id=" + this.product.product_id
     ).subscribe(
       result => {
         console.log(result)
@@ -122,7 +127,7 @@ export class PaymentPage implements AfterViewInit, OnDestroy{
       }
     )
 
-    this.http.get("https://localhost-ix-fs-2-2018.herokuapp.com/menuinfo?menu_id="+this.menu.menu_id
+    this.http.get(this.globals.URL + "/menuinfo?menu_id=" + this.menu.menu_id
     ).subscribe(
       result => {
         console.log(result)
@@ -135,7 +140,7 @@ export class PaymentPage implements AfterViewInit, OnDestroy{
   navigateToHistory() {
     console.log("Navigating to HistoryPage...");
 
-    this.navCtrl.push(HistoryPage, {productParameter: this.product});
+    this.navCtrl.push(HistoryPage, { productParameter: this.product });
   }
 
   navigateToPaymentConfirm() {
@@ -147,6 +152,6 @@ export class PaymentPage implements AfterViewInit, OnDestroy{
     });
   }
 
-  
+
 
 }

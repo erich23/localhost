@@ -10,6 +10,7 @@ import { LocationsPage } from '../locations/locations';
 import { LocationPage } from '../location/location';
 import { User } from '../models/user';
 import { CategoriesPage } from '../categories/categories';
+import { Globals } from '../../app/globals';
 
 
 @Component({
@@ -30,13 +31,14 @@ export class ProductsPage {
         public navCtrl: NavController,
         public navParams: NavParams,
         public productService: ProductService,
+        public globals: Globals,
         public http: Http
     ) {
         this.products = [];
 
         if (localStorage.getItem("TOKEN")) {
 
-            this.http.get("https://localhost-ix-fs-2-2018.herokuapp.com/verify?jwt=" + localStorage.getItem("TOKEN"))
+            this.http.get(this.globals.URL + "/verify?jwt=" + localStorage.getItem("TOKEN"))
                 .subscribe(
                     result => {
                         console.log(result.json());
@@ -89,7 +91,7 @@ export class ProductsPage {
         this.navCtrl.push(LocationsPage);
     }
 
-  
+
 }
 
 

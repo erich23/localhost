@@ -7,6 +7,6 @@ export declare class Transaction extends Entity {
     customer_id: number;
     provider_id: number;
     menu_id: number;
-    date_sold: string;
+    date_sold: Date;
     getTransactionId(): number;
 }

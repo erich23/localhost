@@ -2,23 +2,24 @@ import { Product } from "../pages/models/product";
 import { Injectable } from "@angular/core";
 import { Http } from "@angular/http";
 import { callbackify } from "util";
+import { Globals } from "../app/globals";
 
 @Injectable()
 export class ProductService {
 
 
-    
-   
 
-    constructor( public http: Http) {
+
+
+    constructor(public http: Http, public globals: Globals) {
 
     }
 
     // getProductByCity(locationName: string, callback){
 
 
-       // this.http.get("https://localhost-ix-fs-2-2018.herokuapp.com/productbylocation?city=" + locationName ).subscribe(
-    //     this.http.get("http://localhost:3000/productbylocation?city=" + locationName ).subscribe(
+    // this.http.get(this.globals.URL + "/productbylocation?city=" + locationName ).subscribe(
+    //     this.http.get(this.globals.URL + "/productbylocation?city=" + locationName ).subscribe(
 
     //         result => {
 
@@ -31,8 +32,8 @@ export class ProductService {
 
     // }
 
-    async getProductByCity(locationName: string){
-        return this.http.get("https://localhost-ix-fs-2-2018.herokuapp.com/productbylocation?city=" + locationName ).toPromise();
+    async getProductByCity(locationName: string) {
+        return this.http.get(this.globals.URL + "/productbylocation?city=" + locationName).toPromise();
     }
 
 
@@ -41,33 +42,33 @@ export class ProductService {
 
     getAllProducts(callback) {
         // if (this.products.length) return this.products;
-        this.http.get("https://localhost-ix-fs-2-2018.herokuapp.com/allproducts")
-        .subscribe(
-            result => {
-                console.log(result);
-                let products = result.json() as Array<Product>
-                callback(null, products.reverse());
-            },
-            err => {
-                console.log(err);
-                callback(err);
-            }
-        )
+        this.http.get(this.globals.URL + "/allproducts")
+            .subscribe(
+                result => {
+                    console.log(result);
+                    let products = result.json() as Array<Product>
+                    callback(null, products.reverse());
+                },
+                err => {
+                    console.log(err);
+                    callback(err);
+                }
+            )
     }
 
     getUserProducts(callback) {
 
-        this.http.get("https://localhost-ix-fs-2-2018.herokuapp.com/myproducts")
-        .subscribe(
-            result => {
-                console.log(result);
-                let products = result.json() as Array<Product>
-                callback(null, products.reverse());
-            },
-            err => {
-                console.log(err);
-                callback(err);
-            }
-        )
+        this.http.get(this.globals.URL + "/myproducts")
+            .subscribe(
+                result => {
+                    console.log(result);
+                    let products = result.json() as Array<Product>
+                    callback(null, products.reverse());
+                },
+                err => {
+                    console.log(err);
+                    callback(err);
+                }
+            )
     }
 }

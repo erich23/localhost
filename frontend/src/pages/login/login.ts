@@ -5,6 +5,7 @@ import { RegistrationPage } from '../registration/registration';
 import { ProductsPage } from '../products/products';
 import { Http } from '@angular/http';
 import { TabsPage } from '../tabs/tabs';
+import { Globals } from '../../app/globals';
 
 
 @Component({
@@ -20,11 +21,11 @@ export class LoginPage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    public http: Http) 
-    {}
+    public globals: Globals,
+    public http: Http) { }
 
   login() {
-    this.http.post('https://localhost-ix-fs-2-2018.herokuapp.com/login', {
+    this.http.post(this.globals.URL + '/login', {
       email: this.email,
       password: this.password
     }).subscribe(

@@ -11,6 +11,8 @@ import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators/map';
 import { LoadingController } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
+import { Globals } from '../../app/globals';
+
 
 
 /**
@@ -27,6 +29,7 @@ import { AlertController } from 'ionic-angular';
 })
 export class AddproductPage {
 
+
   //for image upload
   ref: AngularFireStorageReference;
   task: AngularFireUploadTask;
@@ -39,13 +42,16 @@ export class AddproductPage {
   public price: string;
   public category: string;
   public categoryOther: string;
-  public date: string[] = [];
-  public time: string[] = [];
+  public date: Date[] = [];
+  public time: Time[] = [];
   public categories: Array<Category>;
   public city: string;
   public flag: boolean;
 
+  public dateError: boolean = false;
+
   public row: any
+
   public rows: Array<{}> = [];
 
   constructor(
@@ -54,14 +60,13 @@ export class AddproductPage {
     public http: Http,
     private afStorage: AngularFireStorage,
     public loadingCtrl: LoadingController,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    public globals: Globals
   ) {
-
-
 
     if (localStorage.getItem("TOKEN")) {
 
-      this.http.get("https://localhost-ix-fs-2-2018.herokuapp.com/verify?jwt=" + localStorage.getItem("TOKEN"))
+      this.http.get(this.globals.URL + "/verify?jwt=" + localStorage.getItem("TOKEN"))
         .subscribe(
           result => {
             console.log(result.json());
@@ -114,12 +119,6 @@ export class AddproductPage {
       }
     )
 
-
-
-
-
-
-
   }
 
 
@@ -131,7 +130,39 @@ export class AddproductPage {
     this.rows.pop();
   }
 
+  datesAreValid() {
+
+    if (this.date.length == 0 || this.time.length == 0) {
+      return false;
+    }
+
+    var newDate = new Date().getDate;
+
+
+
+    console.log(newDate);
+
+    for (let i = 0; i < this.date.length; ++i) {
+      console.log(this.date[i].getDate);
+      if (newDate >= this.date[i].getDate) {
+
+        return false;
+
+      }
+
+    }
+
+    return true;
+
+  }
+
+
   addproduct() {
+
+    if (this.date.length == 0 || this.time.length == 0) {
+      this.dateError = true;
+      return;
+    }
 
     if (this.downloadURL === null) {
       this.downloadURL = "../../assets/imgs/localhostlogo2.png"
@@ -141,7 +172,7 @@ export class AddproductPage {
       this.category = this.categoryOther;
     }
 
-    this.http.post('https://localhost-ix-fs-2-2018.herokuapp.com/addcategory', {
+    this.http.post(this.globals.URL + '/addcategory', {
       name: this.category
     })
       .subscribe(
@@ -149,7 +180,7 @@ export class AddproductPage {
           console.log(result.json());
           console.log("result.json()");
           let categoryInfo = result.json();
-          this.http.post('https://localhost-ix-fs-2-2018.herokuapp.com/addproduct?jwt=' + localStorage.getItem("TOKEN"), {
+          this.http.post(this.globals.URL + '/addproduct?jwt=' + localStorage.getItem("TOKEN"), {
             name: this.name,
             description: this.description,
             category_id: categoryInfo.category_id,
@@ -161,7 +192,7 @@ export class AddproductPage {
               let productInfo = result.json()
               for (let i = 0; i < this.date.length; i++) {
 
-                this.http.post('https://localhost-ix-fs-2-2018.herokuapp.com/addmenu?product_id=' + productInfo.product_id, {
+                this.http.post(this.globals.URL + '/addmenu?product_id=' + productInfo.product_id, {
                   price: this.price,
                   date: this.date[i],
                   time: this.time[i]
@@ -193,7 +224,7 @@ export class AddproductPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad AddproductPage');
 
-    this.http.get('https://localhost-ix-fs-2-2018.herokuapp.com/allcategories')
+    this.http.get(this.globals.URL + '/allcategories')
       .subscribe(
         result => {
           console.log(result)

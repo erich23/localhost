@@ -9,6 +9,7 @@ import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators/map';
 import { LoadingController } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
+import { Globals } from '../../app/globals';
 
 
 @Component({
@@ -31,13 +32,14 @@ export class RegistrationPage {
   public confirmPassword: string;
   public phone: string;
   public flag: boolean;
-  
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public http: Http,
     private afStorage: AngularFireStorage,
     public loadingCtrl: LoadingController,
+    public globals: Globals,
     private alertCtrl: AlertController) {
 
   }
@@ -45,13 +47,13 @@ export class RegistrationPage {
   register() {
 
     //set profile picture to default angry cat if not given custom image
-    if(this.downloadURL == null){
+    if (this.downloadURL == null) {
 
       this.downloadURL = "https://www.catster.com/wp-content/uploads/2017/08/A-fluffy-cat-looking-funny-surprised-or-concerned.jpg";
     }
 
     console.log(this.downloadURL + "HERE KITTY KITTY")
-    this.http.post('https://localhost-ix-fs-2-2018.herokuapp.com/registration', {
+    this.http.post(this.globals.URL + '/registration', {
       firstname: this.firstname,
       lastname: this.lastname,
       email: this.email,
@@ -86,7 +88,7 @@ export class RegistrationPage {
       spinner: 'crescent',
       content: 'Uploading Image...',
       duration: 21031231
-      
+
     });
 
     loading.present();
@@ -95,7 +97,7 @@ export class RegistrationPage {
       loading.dismiss();
 
       console.log("image upload is taking too long")
-      
+
     }, 60000);
 
     const id = Math.random().toString(36).substring(2);
@@ -103,7 +105,7 @@ export class RegistrationPage {
     this.task = this.ref.put(event.target.files[0]);
     this.uploadProgress = this.task.percentageChanges();
     this.uploadState = this.task.snapshotChanges().pipe(map(s => s.state));
-    
+
 
 
     this.task.snapshotChanges().subscribe(
@@ -119,7 +121,7 @@ export class RegistrationPage {
     )
 
 
-   
+
 
 
 

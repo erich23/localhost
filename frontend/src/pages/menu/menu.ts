@@ -4,6 +4,7 @@ import { Http } from '@angular/http';
 import { Menu } from '../models/menu';
 import { Product } from '../models/product';
 import { PaymentPage } from '../payment/payment';
+import { Globals } from '../../app/globals';
 
 /**
  * Generated class for the MenuPage page.
@@ -24,31 +25,32 @@ export class MenuPage {
   public menu: Menu = new Menu;
 
   constructor(
-    public navCtrl: NavController, 
+    public navCtrl: NavController,
     public navParams: NavParams,
+    public globals: Globals,
     public http: Http) {
-      this.product = this.navParams.get("productParameter");
+    this.product = this.navParams.get("productParameter");
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad MenuPage');
 
-    this.http.get('https://localhost-ix-fs-2-2018.herokuapp.com/allmenuinfo?product_id='+this.product.product_id)
-    .subscribe(
-      result => (
-        console.log(result),
-        this.menuItems = result.json()
-      ), err => (
-        console.log(err)
+    this.http.get(this.globals.URL + '/allmenuinfo?product_id=' + this.product.product_id)
+      .subscribe(
+        result => (
+          console.log(result),
+          this.menuItems = result.json()
+        ), err => (
+          console.log(err)
+        )
       )
-    )
-    
+
   }
 
   navigateToPayment(menu: Menu) {
     console.log("Navigating to PaymentPage...");
 
-    this.navCtrl.push(PaymentPage, { 
+    this.navCtrl.push(PaymentPage, {
       menuParameter: menu,
       productParameter: this.product
     });

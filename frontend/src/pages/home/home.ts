@@ -6,6 +6,7 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { ProductsPage } from '../products/products';
 import { PaymentPage } from '../payment/payment';
+import { Globals } from '../../app/globals';
 
 @Component({
   selector: 'page-home',
@@ -17,16 +18,17 @@ export class HomePage {
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
+    public globals: Globals,
     public http: Http) {
 
     if (localStorage.getItem("TOKEN")) {
 
-      this.http.get("https://localhost-ix-fs-2-2018.herokuapp.com/verify?jwt=" + localStorage.getItem("TOKEN"))
+      this.http.get(this.globals.URL + "/verify?jwt=" + localStorage.getItem("TOKEN"))
         .subscribe(
           result => {
             console.log(result.json());
             this.navCtrl.push(ProductsPage);
-            
+
           },
           err => {
             console.log(err); // "Invalid log in"

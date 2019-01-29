@@ -85,6 +85,20 @@ let ProductListController = class ProductListController {
         let findMenu = await this.menuRepo.findById(menu_id);
         return findMenu;
     }
+    async getMenuByUser(jwt) {
+        try {
+            let payload = jsonwebtoken_1.verify(jwt, 'shh');
+            var user = payload.user;
+        }
+        catch (err) {
+            throw new rest_1.HttpErrors.Unauthorized("Invalid token");
+        }
+        return await this.menuRepo.find({
+            where: {
+                user_id: user.user_id
+            }
+        });
+    }
     async deleteMenu(menu_id) {
         return await this.menuRepo.deleteById(menu_id);
     }
@@ -204,6 +218,13 @@ __decorate([
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], ProductListController.prototype, "getOneMenu", null);
+__decorate([
+    rest_1.get('/menu'),
+    __param(0, rest_1.param.query.string("jwt")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], ProductListController.prototype, "getMenuByUser", null);
 __decorate([
     rest_1.get('/deletemenu'),
     __param(0, rest_1.param.query.number('menu_id')),

@@ -122,6 +122,26 @@ export class ProductListController {
     return findMenu;
   }
 
+  @get('/menu')
+  async getMenuByUser(
+    @param.query.string("jwt") jwt: string,
+  ) {
+    try {
+      let payload = verify(jwt, 'shh') as any;
+      var user = payload.user;
+    } catch (err) {
+      throw new HttpErrors.Unauthorized("Invalid token")
+    }
+
+    return await this.menuRepo.find({
+      where: {
+        user_id: user.user_id
+      }
+    })
+
+
+  }
+
 
   @get('/deletemenu')
   async deleteMenu(

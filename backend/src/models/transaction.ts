@@ -42,9 +42,9 @@ export class Transaction extends Entity {
   menu_id: number; // menu id
 
   @property({
-    type: 'string'
+    type: 'date'
   })
-  date_sold: string;
+  date_sold: Date;
 
   getTransactionId() {
     return this.transaction_id;

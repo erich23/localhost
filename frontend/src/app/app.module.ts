@@ -3,8 +3,8 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule, IonicPageModule, Menu } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
-import { HttpModule} from '@angular/http';
-import {FormsModule} from '@angular/forms';
+import { HttpModule } from '@angular/http';
+import { FormsModule } from '@angular/forms';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
@@ -33,6 +33,7 @@ import { PaymentconfirmPage } from '../pages/paymentconfirm/paymentconfirm';
 //image upload imports INSTALL FIRST: npm i firebase angularfire2
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireStorageModule } from 'angularfire2/storage';
+import { Globals } from './globals';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,7 @@ import { AngularFireStorageModule } from 'angularfire2/storage';
     ReviewsPage,
     SettingsPage,
     PaymentconfirmPage
- ],
+  ],
 
 
 
@@ -74,10 +75,10 @@ import { AngularFireStorageModule } from 'angularfire2/storage';
 
     //for image uploads through firebase
     AngularFireModule.initializeApp({
-    apiKey: "AIzaSyDjsynoR8uBbQ2-5C4rYdMEz5a7bbvjkyo",
-    authDomain: "localhost-80513.firebaseapp.com",
-    projectId: "localhost-80513",
-    storageBucket: "localhost-80513.appspot.com",
+      apiKey: "AIzaSyDjsynoR8uBbQ2-5C4rYdMEz5a7bbvjkyo",
+      authDomain: "localhost-80513.firebaseapp.com",
+      projectId: "localhost-80513",
+      storageBucket: "localhost-80513.appspot.com",
     }),
     AngularFireStorageModule
   ],
@@ -110,7 +111,8 @@ import { AngularFireStorageModule } from 'angularfire2/storage';
     ProductService,
     LocationService,
     ReviewService,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    Globals,
+    { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]
 })
-export class AppModule {}
+export class AppModule { }

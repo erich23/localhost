@@ -22,11 +22,25 @@ export class PaymentconfirmPage {
   public product: Product = new Product();
   public menu: Menu = new Menu();
   public transaction: Transaction = new Transaction();
+  public menuDate: string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
-    this.product = this.navParams.get("productParameter"),
-    this.menu = this.navParams.get("menuParameter"),
-    this.transaction = this.navParams.get("paymentConfirm")
+    this.product = this.navParams.get("productParameter");
+    this.menu = this.navParams.get("menuParameter");
+    this.transaction = this.navParams.get("paymentConfirm");
+    this.transaction.date_sold = this.processDate(this.transaction.date_sold);
+
+  }
+
+  processDate(date: string) {
+    for (let i = 0; i < date.length; ++i) {
+      if (date[i] == 'T') {
+        date = date.substr(0, i);
+        break;
+      }
+    }
+
+    return date;
 
   }
 
